@@ -103,8 +103,7 @@ class _BaseDataAccessProxy(object):
     
     def __map_row(self, row_data, clazz):
         model = clazz()
-        for key in row_data:
-            model.__dict__[key] = row_data[key]
+        model.__dict__.update(row_data)
         return model
     
     def __map_rows(self, csr, clazz):
@@ -217,10 +216,10 @@ class _DataAccessProxy(_BaseDataAccessProxy):
             if can_read:
                 self._read_db_list.append(db)
     
-    def get_read_db(self):
+    def get_read_db(self, **kws):
         return random.choice(self._read_db_list)
     
-    def get_write_db(self):
+    def get_write_db(self, **kws):
         return self._write_db
     
     def query(self, sql, vars=None):
@@ -279,6 +278,9 @@ class _ShardDataAccessProxy(_BaseDataAccessProxy):
             return kws['tablename_formatter'](ori_table=table, **kws)
         else:
             return ('%s_%0' + str(len(str(self.max_hash))) + 'd') % (table, self.get_hash(kws['shard']))
+        
+    def multi_insert(self):
+        raise ShardDBException(u'shard数据源不支持批量插入!')
         
 
 # 承载数据源代理的容器
