@@ -36,7 +36,7 @@ web.config.dbnodes = '/data/ailuntan/conf/dbnodes.conf'
 web.config.dbpool = '/data/ailuntan/conf/dbpool.conf'
 
 from shardpy import db
-<pre>
+</pre>
 就可以使用shardpy了!
 ## 读取数据
 ### 从db中获取一个对象
